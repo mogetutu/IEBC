@@ -11,7 +11,7 @@
     <script>
     $(function() {
         // Map View
-        var map = L.map('map').setView([-0.09, 43], 7);
+        var map = L.map('map').setView([0.4, 45], 6);
         // OSM Tile
         L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
@@ -59,9 +59,22 @@
             height: 100%;
             width:  100%;
          }
+         div#cover {
+            position: absolute;
+            right:55px;
+            top: 30px;
+            z-index:3;
+            width: 600px;
+            height: 600px;
+            background-color/**/: #FFFFFF;
+            background-image/**/: none;
+            opacity: 0.5;
+            filter: alpha(opacity=50);
+        }
      </style>
 </head>
 <body >
     <div id="map"></div>
+    <div id="cover">floating</div>
 </body>
 </html>
