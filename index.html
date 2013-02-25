@@ -4,6 +4,7 @@
     <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
     <script src="http://code.jquery.com/jquery-migrate-1.1.1.min.js"></script>
     <script src="http://cdn.leafletjs.com/leaflet-0.5/leaflet.js"></script>
+    <script src="js/bomet.js"></script>
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5/leaflet.css" />
     <!--[if lte IE 8]>
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5/leaflet.ie.css" />
@@ -29,9 +30,10 @@
         }
 
         // Loop for GeoJSON data
-        for (var i = 1; i <= 47; i++) {
-            counties = 'http://api.iebc.or.ke/geojson/county_'+ i +'.geojson';
-            
+        locations = counties.region.locations
+        for (var i = 0; i <= 47; i++) {
+            counties = locations[i].polygon;
+
             $.getJSON(counties, function(data) {
                 county = data.features[0].properties.OBJECTID_1;
                 county_id = data.features[0];
