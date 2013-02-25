@@ -1,0 +1,67 @@
+<html>
+<head>
+    <title>Leaflet</title>
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="http://code.jquery.com/jquery-migrate-1.1.1.min.js"></script>
+    <script src="http://cdn.leafletjs.com/leaflet-0.5/leaflet.js"></script>
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5/leaflet.css" />
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5/leaflet.ie.css" />
+    <![endif]-->
+    <script>
+    $(function() {
+        // Map View
+        var map = L.map('map').setView([-0.09, 43], 7);
+        // OSM Tile
+        L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
+                maxZoom: 18
+            }).addTo(map);
+
+        function onEachFeature(feature, layer) {
+            var popupContent = "<p> " + feature.properties.COUNTY_NAM + " COUNTY.</p>";
+
+            if (feature.properties && feature.properties.popupContent) {
+                popupContent += feature.properties.popupContent;
+            }
+
+            layer.bindPopup(popupContent);
+        }
+
+        // Loop for GeoJSON data
+        for (var i = 1; i <= 47; i++) {
+            counties = 'http://api.iebc.or.ke/geojson/county_'+ i +'.geojson';
+            
+            $.getJSON(counties, function(data) {
+                county = data.features[0].properties.OBJECTID_1;
+                county_id = data.features[0];
+                $.each(data, function() {
+                    L.geoJson(county_id, {
+                        filter: function (feature, layer) {
+                            if (feature.properties) {
+                                // If the property "underConstruction" exists and is true, return false (don't render features under construction)
+                                return feature.properties.underConstruction !== undefined ? !feature.properties.underConstruction : true;
+                            }
+                            return false;
+                        },
+
+                        onEachFeature: onEachFeature
+                    }).addTo(map);
+
+                });
+
+            });
+        };
+    });
+    </script>
+     <style type="text/css" media="screen">
+         #map{
+            height: 100%;
+            width:  100%;
+         }
+     </style>
+</head>
+<body >
+    <div id="map"></div>
+</body>
+</html>
